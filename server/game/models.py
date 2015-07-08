@@ -13,6 +13,7 @@ class Invite(models.Model):
   from_player = models.ForeignKey(User, related_name='from_player')
   to_player = models.ForeignKey(User, related_name='to_player')
   state = models.CharField(max_length=1, choices=STATES)
+  game = models.ForeignKey('Game', blank=True, null=True)
 
 
 class GameException(Exception):

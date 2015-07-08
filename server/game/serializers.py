@@ -20,6 +20,7 @@ class InviteSerializer(serializers.ModelSerializer):
       'from_player',
       'to_player',
       'state',
+      'game',
     ]
 
 class GameSerializer(serializers.ModelSerializer):

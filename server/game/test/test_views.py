@@ -45,7 +45,7 @@ class InviteGameTest(APITransactionTestCase):
     self.assertEquals(invite.to_player, u2)
     self.assertEquals(invite.state, 'I')
 
-  def test_should_accept_invite(self):
+  def test_should_accept_invite_and_return_game_id(self):
     u1 = User.objects.create_user(username='u1', password='u1')
     u2 = User.objects.create_user(username='u2', password='u2')
     invite = Invite.objects.create(from_player=u1, to_player=u2, state='I')
@@ -59,6 +59,11 @@ class InviteGameTest(APITransactionTestCase):
 
     invite = Invite.objects.get(pk=invite.pk)
     self.assertEquals(invite.state, 'A')
+
+    game = Game.objects.get(pk=response.data['game'])
+    self.assertEquals(game.x_player, u2)
+    self.assertEquals(game.o_player, u1)
+    self.assertEquals(game.state, 'XP')
 
   def test_should_delete_invite(self):
     u1 = User.objects.create_user(username='u1', password='u1')

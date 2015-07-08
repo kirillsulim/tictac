@@ -56,10 +56,17 @@ class InviteDetails(APIView):
 
   def put(self, request, pk):
     invite = get_object_or_404(Invite, pk=pk)
+    if invite.state != 'I':
+      return Response(status=status.HTTP_409_CONFLICT)
     sz = InviteSerializer(invite, data=request.data, partial=True)
     if sz.is_valid():
-      sz.save()
-      return Response(data=sz.data, status=status.HTTP_202_ACCEPTED)
+      invite = sz.save()
+      if invite.state == 'A':
+        invite.game = Game.objects.create(x_player=invite.to_player, o_player=invite.from_player)
+        invite.save()
+        return Response(data=InviteSerializer(invite).data, status=status.HTTP_202_ACCEPTED)
+      else:
+        return Response(data=sz.data, status=status.HTTP_202_ACCEPTED)
     else:
       return Response(data=sz.errors, status=status.HTTP_400_BAD_REQUEST)
 
