@@ -4,6 +4,24 @@ from rest_framework import serializers
 from .models import *
 
 
+class UserSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = User
+    fields = [
+      'pk',
+      'username',
+    ]
+
+class InviteSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Invite
+    fields = [
+      'pk',
+      'from_player',
+      'to_player',
+      'state',
+    ]
+
 class GameSerializer(serializers.ModelSerializer):
   class Meta:
     model = Game

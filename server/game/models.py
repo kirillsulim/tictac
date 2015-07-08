@@ -4,6 +4,16 @@ from django.contrib.auth.models import User
 
 # TODO: REFACTOR! Game logic should be separated from models
 
+class Invite(models.Model):
+  STATES = (
+    ('I', 'Invited'),
+    ('A', 'Accepted'),
+    ('D', 'Declined'),
+  )
+  from_player = models.ForeignKey(User, related_name='from_player')
+  to_player = models.ForeignKey(User, related_name='to_player')
+  state = models.CharField(max_length=1, choices=STATES)
+
 
 class GameException(Exception):
   pass
