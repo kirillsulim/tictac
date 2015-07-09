@@ -30,24 +30,38 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-)
+PREREQ_APPS = [
+  'django.contrib.auth',
+  'django.contrib.admin',
+  'django.contrib.contenttypes',
+  'django.contrib.sessions',
+  'django.contrib.messages',
+  'django.contrib.staticfiles',
+  'django.contrib.sites',
+  'rest_framework',
+  'rest_framework.authtoken',
+  'allauth',
+  'allauth.account',
+  'rest_auth',
+  'rest_auth.registration',
+]
+
+PROJECT_APPS = [
+  'game',
+]
+
+INSTALLED_APPS = PREREQ_APPS + PROJECT_APPS
 
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+  'django.contrib.sessions.middleware.SessionMiddleware',
+  'django.middleware.common.CommonMiddleware',
+  'django.middleware.csrf.CsrfViewMiddleware',
+  'django.contrib.auth.middleware.AuthenticationMiddleware',
+  'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+  'django.contrib.messages.middleware.MessageMiddleware',
+  'django.middleware.clickjacking.XFrameOptionsMiddleware',
+  'django.middleware.security.SecurityMiddleware',
+  'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'tictac.urls'
@@ -85,7 +99,13 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+from django.utils.translation import ugettext_lazy as _
+
+LANGUAGE_CODE = 'ru-ru'
+LANGUAGES = (
+  ('en-us', _('English')),
+  ('ru-ru', _('Rusiian')),
+)
 
 TIME_ZONE = 'UTC'
 
@@ -100,3 +120,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# REST
+REST_FRAMEWORK = {
+  'DEFAULT_PERMISSION_CLASSES': [
+    'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+  ]
+}
+
+# Auth
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+SITE_ID = 1
+
