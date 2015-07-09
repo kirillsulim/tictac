@@ -33,13 +33,13 @@ class GameSerializer(serializers.ModelSerializer):
     ]
 
 
-class MoveSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Move
-    fields = [
-      'player',
-      'game',
-      'order',
-      'code',
-    ]
+class MoveSerializer(serializers.Serializer):
+  player = serializers.IntegerField()
+  for_game = serializers.IntegerField()
+  order = serializers.IntegerField()
+  code = serializers.CharField(max_length=2)
+
+  def create(validated_data):
+    return Move(**validated_data)
+
 

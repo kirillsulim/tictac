@@ -7,11 +7,12 @@ from game.models import*
 
 
 class PlayerListTest(APITransactionTestCase):
-  def test_should_return_players_list(self):
-    User.objects.create_user(username='u1')
-    User.objects.create_user(username='u2')
-    User.objects.create_user(username='current', password='current')
+  def setUp(self):
+    self.u1 = User.objects.create_user(username='u1', password='u1')
+    self.u2 = User.objects.create_user(username='u2', password='u2')
 
+  def test_should_return_players_list(self):
+    User.objects.create_user(username='current', password='current')
     self.client.login(username='current', password='current')
 
     url = reverse('players')
@@ -25,30 +26,29 @@ class PlayerListTest(APITransactionTestCase):
     self.assertEquals(u2, 'u2')
 
 class InviteGameTest(APITransactionTestCase):
-  def test_should_invite_player(self):
-    u1 = User.objects.create_user(username='u1', password='u1')
-    u2 = User.objects.create_user(username='u2', password='u2')
+  def setUp(self):
+    self.u1 = User.objects.create_user(username='u1', password='u1')
+    self.u2 = User.objects.create_user(username='u2', password='u2')
 
+  def test_should_invite_player(self):
     url = reverse('invite-list')
 
     self.client.login(username='u1', password='u1')
     response = self.client.post(url, data={
-      'to_player': u2.pk,
-      'from_player': u1.pk,
+      'to_player': self.u2.pk,
+      'from_player': self.u1.pk,
       'state': 'I',
     }, format='json')
 
     self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
     invite = Invite.objects.get(pk=response.data['pk'])
-    self.assertEquals(invite.from_player, u1)
-    self.assertEquals(invite.to_player, u2)
+    self.assertEquals(invite.from_player, self.u1)
+    self.assertEquals(invite.to_player, self.u2)
     self.assertEquals(invite.state, 'I')
 
   def test_should_accept_invite_and_return_game_id(self):
-    u1 = User.objects.create_user(username='u1', password='u1')
-    u2 = User.objects.create_user(username='u2', password='u2')
-    invite = Invite.objects.create(from_player=u1, to_player=u2, state='I')
+    invite = Invite.objects.create(from_player=self.u1, to_player=self.u2, state='I')
 
     url = reverse('invite', args=[invite.pk])
 
@@ -61,14 +61,12 @@ class InviteGameTest(APITransactionTestCase):
     self.assertEquals(invite.state, 'A')
 
     game = Game.objects.get(pk=response.data['game'])
-    self.assertEquals(game.x_player, u2)
-    self.assertEquals(game.o_player, u1)
+    self.assertEquals(game.x_player, self.u2)
+    self.assertEquals(game.o_player, self.u1)
     self.assertEquals(game.state, 'XP')
 
   def test_should_delete_invite(self):
-    u1 = User.objects.create_user(username='u1', password='u1')
-    u2 = User.objects.create_user(username='u2', password='u2')
-    invite = Invite.objects.create(from_player=u1, to_player=u2, state='I')
+    invite = Invite.objects.create(from_player=self.u1, to_player=self.u2, state='I')
 
     url = reverse('invite', args=[invite.pk])
 
@@ -81,11 +79,9 @@ class InviteGameTest(APITransactionTestCase):
     self.assertEquals(invite.state, 'D')
 
   def test_should_form_list_with_active_invites(self):
-    u1 = User.objects.create_user(username='u1', password='u1')
-    u2 = User.objects.create_user(username='u2', password='u2')
-    invite = Invite.objects.create(from_player=u1, to_player=u2, state='I')
-    Invite.objects.create(from_player=u1, to_player=u2, state='A')
-    Invite.objects.create(from_player=u1, to_player=u2, state='D')
+    invite = Invite.objects.create(from_player=self.u1, to_player=self.u2, state='I')
+    Invite.objects.create(from_player=self.u1, to_player=self.u2, state='A')
+    Invite.objects.create(from_player=self.u1, to_player=self.u2, state='D')
 
     self.client.login(username='u2', password='u2')
     url = reverse('invite-list')
@@ -95,8 +91,8 @@ class InviteGameTest(APITransactionTestCase):
 
     self.assertEquals(len(response.data), 1)
     invite = Invite.objects.get(pk=response.data[0]['pk'])
-    self.assertEquals(invite.from_player, u1)
-    self.assertEquals(invite.to_player, u2)
+    self.assertEquals(invite.from_player, self.u1)
+    self.assertEquals(invite.to_player, self.u2)
     self.assertEquals(invite.state, 'I')
 
 
