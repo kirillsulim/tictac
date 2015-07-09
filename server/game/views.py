@@ -117,7 +117,7 @@ class MakeMove(APIView):
     data = JSONParser().parse(request)
     sz = MoveSerializer(data=data, partial=True)
     if sz.is_valid():
-      game_pk = sz.validated_data['for_game']
+      game_pk = sz.validated_data['for_game'].pk
       game = get_object_or_404(Game, pk=game_pk)
 
       sz.validated_data['for_game'] = game

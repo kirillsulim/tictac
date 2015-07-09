@@ -95,30 +95,35 @@ class MakeMoveTest(APITransactionTestCase):
 
     self.assertEquals(response.status_code, status.HTTP_202_ACCEPTED)
     self.assertEquals(response.data['state'], 'OP')
+    self.assertEquals(len(response.data['moves']), 1)
 
     self.client.login(username='u2', password='u2')
     response = self.client.post(url, data={'for_game': game.pk, 'code': 'A2'}, format='json')
 
     self.assertEquals(response.status_code, status.HTTP_202_ACCEPTED)
     self.assertEquals(response.data['state'], 'XP')
+    self.assertEquals(len(response.data['moves']), 2)
 
     self.client.login(username='u1', password='u1')
     response = self.client.post(url, data={'for_game': game.pk, 'code': 'B1'}, format='json')
 
     self.assertEquals(response.status_code, status.HTTP_202_ACCEPTED)
     self.assertEquals(response.data['state'], 'OP')
+    self.assertEquals(len(response.data['moves']), 3)
 
     self.client.login(username='u2', password='u2')
     response = self.client.post(url, data={'for_game': game.pk, 'code': 'B2'}, format='json')
 
     self.assertEquals(response.status_code, status.HTTP_202_ACCEPTED)
     self.assertEquals(response.data['state'], 'XP')
+    self.assertEquals(len(response.data['moves']), 4)
 
     self.client.login(username='u1', password='u1')
     response = self.client.post(url, data={'for_game': game.pk, 'code': 'C1'}, format='json')
 
     self.assertEquals(response.status_code, status.HTTP_202_ACCEPTED)
     self.assertEquals(response.data['state'], 'XW')
+    self.assertEquals(len(response.data['moves']), 5)
 
 
 

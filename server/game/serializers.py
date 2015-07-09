@@ -23,23 +23,34 @@ class InviteSerializer(serializers.ModelSerializer):
       'game',
     ]
 
+
+class MoveSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Move
+    fields = [
+      'player',
+      'for_game',
+      'order',
+      'code',
+    ]
+    
+  def create(validated_data):
+    return Move(**validated_data)
+
+
 class GameSerializer(serializers.ModelSerializer):
+  moves = MoveSerializer(many=True, read_only=True)
+
   class Meta:
     model = Game
     fields = [
       'x_player',
       'o_player',
       'state',
+      'moves',
     ]
 
 
-class MoveSerializer(serializers.Serializer):
-  player = serializers.IntegerField()
-  for_game = serializers.IntegerField()
-  order = serializers.IntegerField()
-  code = serializers.CharField(max_length=2)
 
-  def create(validated_data):
-    return Move(**validated_data)
 
 
