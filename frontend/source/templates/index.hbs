@@ -1,14 +1,55 @@
 {{#extend '_h5bp-layout' title='Main'}}
   {{#content 'main'}}
-    <div class="jumbotron">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 col-md-span-3">
-            <h1>Hello!</h1>
-            <p>{{text}}</p>
-          </div>          
-        </div>
+    <div class="container">
+      <div id='game' class='part'></div>
+      <div id='games' class='part'></div>
+      <div id='players' class='part'></div>
+      <div id='invites' class='part'></div>
+      <div id='start' class="part">
+        <div id="login" class="part"></div>
+        <div id="register" class="part"></div>
       </div>
     </div>
+
+    <script type="text/template" id="_login">
+      <div class="login">
+        <a href="#register">register</a>
+        <p>
+          Username: <input type="text" id="username" />
+        </p>
+        <p>
+          Password: <input type="password" id="password" />
+        </p>
+        <p>
+          <button id="do-login">Log in</button>
+        </p>
+      </div>
+    </script>
+
+    <script type="text/template" id="_register">
+      <div class="register">
+        <a href="#login">login</a>
+        <p>
+          Username: <input type="text" id="username" />
+        </p>
+        <p>
+          Password: <input type="password" id="password1" />
+        </p>
+        <p>
+          Retype password: <input type="password" id="password2" />
+        </p>
+        <p>
+          <button id="do-register">Register</button>
+        </p>
+      </div>
+    </script>
+
+    <script type="text/template" id="_players">
+      <div class="players">
+        <% _.each(players, function(p) {
+          %> <p><%= p.username %></p> <%
+        }) %>
+      </div>
+    </script>
   {{/content}}
 {{/extend}}

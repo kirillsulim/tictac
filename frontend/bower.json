@@ -17,7 +17,8 @@
     "underscore": "~1.8.3",
     "bootstrap": "~3.3.5",
     "fontawesome": "~4.3.0",
-    "backbone": "~1.2.1"
+    "backbone": "~1.2.1",
+    "jquery-cookie": "~1.4.1"
   },
   "overrides": {
     "bootstrap": {

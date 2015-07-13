@@ -121,6 +121,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+  os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'frontend', 'build'),
+]
+print(STATICFILES_DIRS)
+
 
 # REST
 REST_FRAMEWORK = {
@@ -135,6 +140,9 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 ACCOUNT_EMAIL_VERIFICATION = "none"
+REST_AUTH_SERIALIZERS = {
+  'USER_DETAILS_SERIALIZER': 'game.serializers.UserSerializer',
+}
 
 SITE_ID = 1
 
