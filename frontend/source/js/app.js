@@ -41,6 +41,7 @@ $(function() {
         this.views.register.render();
       }
       $('.part').hide();
+      $('.nav').hide();
       $('#start').show();
       $('#register').show();
     },
@@ -50,6 +51,7 @@ $(function() {
         this.views.login.render();
       }
       $('.part').hide();
+      $('.nav').hide();
       $('#start').show();
       $('#login').show();
     },
@@ -62,6 +64,7 @@ $(function() {
         this.views.players.render();
       }
       $('.part').hide();
+      $('.nav').show();
       $('#players').show();
     },
     invites: function() {
@@ -73,6 +76,7 @@ $(function() {
         this.views.invites.render();
       }
       $('.part').hide();
+      $('.nav').show();
       $('#invites').show();
     },
     games: function() {
@@ -84,7 +88,21 @@ $(function() {
         this.views.games.render();
       }
       $('.part').hide();
+      $('.nav').show();
       $('#games').show();
+    },
+    game: function(id) {
+      if(!window.router.user) {
+        window.router.navigate('start', {trigger: true});
+      }
+      if(!this.views.game) {
+        this.views.game = new GameView();
+      }
+      this.views.game.render(id);
+
+      $('.part').hide();
+      $('.nav').show();
+      $('#game').show();
     },
     logout: function() {
       $.post('/rest-auth/logout/');
@@ -235,6 +253,60 @@ $(function() {
         $(self.el).html(self.template({games: games.models}));
       });
     },
+    events: {
+      'click .to-game': 'toGame'
+    },
+    toGame: function(e){
+      var id = $(e.target).data('game-id');
+      window.router.navigate('game/' + id, {trigger: true});
+    }
+  });
+
+  var GameView = Backbone.View.extend({
+    el: $('#game'),
+    template: _.template($('#_game').html()),
+    game_id: undefined,
+    render: function(id) {
+      if(id) {
+        game_id = id;
+      } else {
+        id = game_id;
+      }
+      var self = this;
+      games.fetch().done(function() {
+        var game = games.findWhere({pk: parseInt(id)});
+        var map = {};
+        var x_player = game.get('x_player');
+        var o_player = game.get('o_player');
+        _.each(game.get('moves'), function(m){
+          var s;
+          if(m.player == x_player) {
+            s = 'X';
+          }
+          else if(m.player == o_player) {
+            s = 'O';
+          }
+          map[m.code] = s;
+        });
+        console.log(map);
+        $(self.el).html(self.template({game: game, map: map}));
+      });
+    },
+    events: {
+      'click .tile': 'move'
+    },
+    move: function(e) {
+      var self = this;
+      var code = $(e.target).data('code');
+      $.post('/move', {
+        for_game: game_id,
+        code: code
+      }).done(function(){
+        self.render();
+      }).fail(function(e){
+        console.log('ERROR!' + e);
+      });
+    }
   });
 
   window.router = new Router();

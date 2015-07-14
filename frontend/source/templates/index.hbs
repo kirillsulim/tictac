@@ -1,6 +1,11 @@
 {{#extend '_h5bp-layout' title='Main'}}
   {{#content 'main'}}
     <div class="container">
+      <div class="nav">
+        <a href="#invites">invites</a>
+        <a href="#games">games</a>
+        <a href="#players">players</a>                
+      </div>
       <div id='game' class='part'></div>
       <div id='games' class='part'></div>
       <div id='players' class='part'></div>
@@ -50,8 +55,7 @@
           %> <p><%= p.get('username') %><button class="invite" data-player-id="<%= p.get('pk') %>">Invite</button></p> <%
         }) %>
       </div>
-      <a href="#invites">invites</a>
-      <a href="#games">games</a>
+
     </script>
 
     <script type="text/template" id="_invites">
@@ -71,8 +75,28 @@
         <% _.each(games, function(g) {
           %> <p>
             <%= g.get('state') %>
+            <button class="to-game" data-game-id="<%= g.get('pk') %>">To game</button>
           </p> <%
         }) %>
+      </div>
+    </script>
+
+    <script type="text/template" id="_game">
+      <div class="game">
+        <p>
+          This game state is: <%= game.get('state') %>
+        </p>
+        <div>
+          <button data-code="A1" class="tile"><%= map['A1'] %></button>
+          <button data-code="A2" class="tile"><%= map['A2'] %></button>
+          <button data-code="A3" class="tile"><%= map['A3'] %></button><br>
+          <button data-code="B1" class="tile"><%= map['B1'] %></button>
+          <button data-code="B2" class="tile"><%= map['B2'] %></button>
+          <button data-code="B3" class="tile"><%= map['B3'] %></button><br>
+          <button data-code="C1" class="tile"><%= map['C1'] %></button>
+          <button data-code="C2" class="tile"><%= map['C2'] %></button>
+          <button data-code="C3" class="tile"><%= map['C3'] %></button>
+        </div>
       </div>
     </script>
   {{/content}}

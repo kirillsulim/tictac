@@ -98,7 +98,7 @@ class Game(models.Model):
     if not is_x and not is_o:
       raise NotAllowedPlayer()
 
-    if (self.state == 'XP' and is_o) or (self.state == 'OP' and is_x):
+    if not (self.state == 'XP' and is_x) and not (self.state == 'OP' and is_o):
       raise NotYourTurn()
 
     move_max_order = 0

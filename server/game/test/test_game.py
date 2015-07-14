@@ -73,6 +73,27 @@ class GameTest(APITransactionTestCase):
     game.make_move(move)
     self.assertEquals(game.state, 'XW')
 
+  def test_should_not_accept_if_finished(self):
+    game = self.create_game()
+    move = self.create_move(game, self.x_player, 'A1')
+    game.make_move(move)
+
+    move = self.create_move(game, self.o_player, 'A2')
+    game.make_move(move)
+
+    move = self.create_move(game, self.x_player, 'B1')
+    game.make_move(move)
+
+    move = self.create_move(game, self.o_player, 'B2')
+    game.make_move(move)
+
+    move = self.create_move(game, self.x_player, 'C1')
+    game.make_move(move)
+
+    move = self.create_move(game, self.o_player, 'C2')
+
+    self.assertRaises(NotYourTurn, game.make_move, move)
+
 
 
 class GameCounterTest(APITestCase):
