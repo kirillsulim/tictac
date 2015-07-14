@@ -46,8 +46,32 @@
 
     <script type="text/template" id="_players">
       <div class="players">
-        <% _.each(players, function(p) {
-          %> <p><%= p.username %></p> <%
+        <% _.each(plList, function(p) {
+          %> <p><%= p.get('username') %><button class="invite" data-player-id="<%= p.get('pk') %>">Invite</button></p> <%
+        }) %>
+      </div>
+      <a href="#invites">invites</a>
+      <a href="#games">games</a>
+    </script>
+
+    <script type="text/template" id="_invites">
+      <div class="invites">
+        <% _.each(inviteList, function(inv) {
+          %> <p>
+            <%= inv.get('state') %>
+            <button class="accept" data-invite-id="<%= inv.get('pk') %>">Accept</button>
+            <button class="decline" data-invite-id="<%= inv.get('pk') %>">Decline</button>
+          </p> <%
+        }) %>
+      </div>
+    </script>
+
+    <script type="text/template" id="_games">
+      <div class="games">
+        <% _.each(games, function(g) {
+          %> <p>
+            <%= g.get('state') %>
+          </p> <%
         }) %>
       </div>
     </script>

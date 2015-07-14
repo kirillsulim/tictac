@@ -31,8 +31,7 @@ class InviteList(APIView):
     return Response(data=InviteSerializer(invites, many=True).data)
 
   def post(self, request):
-    data = JSONParser().parse(request)
-    sz = InviteSerializer(data=data)
+    sz = InviteSerializer(data=request.data)
     if sz.is_valid():
       sz.save()
       return Response(data=sz.data, status=status.HTTP_201_CREATED)

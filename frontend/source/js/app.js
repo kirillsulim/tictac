@@ -1,5 +1,5 @@
 $(function() {
-  var User = Backbone.Model.extend({
+  var Player = Backbone.Model.extend({
   });
 
   var Game = Backbone.Model.extend({
@@ -12,6 +12,8 @@ $(function() {
   });
 
   var Router = Backbone.Router.extend({
+    views: {},
+    user: undefined,
     routes: {
       '': 'start',
       'start': 'start',
@@ -23,12 +25,10 @@ $(function() {
       'login': 'login',
       'register': 'register'
     },
-    views: {},
-    user: undefined,
     start: function() {
       $.get('/rest-auth/user/').
         done(function(data){
-          this.user = data;
+          window.router.user = data;
           window.router.navigate('players', {trigger: true});
         }).
         fail(function(){
@@ -54,6 +54,9 @@ $(function() {
       $('#login').show();
     },
     players: function() {
+      if(!window.router.user) {
+        window.router.navigate('start', {trigger: true});
+      }
       if(!this.views.players) {
         this.views.players = new PlayersView();
         this.views.players.render();
@@ -62,14 +65,30 @@ $(function() {
       $('#players').show();
     },
     invites: function() {
-      console.log('invites hitted');
+      if(!window.router.user) {
+        window.router.navigate('start', {trigger: true});
+      }
+      if(!this.views.invites) {
+        this.views.invites = new InvitesView();
+        this.views.invites.render();
+      }
+      $('.part').hide();
+      $('#invites').show();
     },
     games: function() {
-      console.log('games hitted');
+      if(!window.router.user) {
+        window.router.navigate('start', {trigger: true});
+      }
+      if(!this.views.games) {
+        this.views.games = new GamesView();
+        this.views.games.render();
+      }
+      $('.part').hide();
+      $('#games').show();
     },
     logout: function() {
       $.post('/rest-auth/logout/');
-      this.start();
+      window.router.navigate('start', {trigger: true});
     }
   });
 
@@ -126,29 +145,97 @@ $(function() {
     }
   });
 
+  var Players = Backbone.Collection.extend({
+    model: Player,
+    url: '/players',
+  });
+
+  var players = new Players();
   var PlayersView = Backbone.View.extend({
     el: $('#players'),
     template: _.template($('#_players').html()),
     render: function() {
       var self = this;
-      var _players;
-      $.get('/players').done(function(data){
-        _players = data;
-        console.log(data);
-        console.log(_players);
-      }).always(function(){
-        console.log(_players);
-        $(self.el).html(self.template({players: _players}));
+      players.fetch().done(function() {
+        $(self.el).html(self.template({plList: players.models}));
+      });
+    },
+    events: {
+      'click .invite': 'invite'
+    },
+    invite: function(e) {
+      var id = $(e.target).data('player-id');
+      $.post('/invites', {
+        from_player: window.router.user.pk,
+        to_player: id,
+        state: 'I'
+      }).done(function(){
+        console.log('done');
+      }).fail(function(){
+        console.log('fail');
       });
     }
   });
 
-  var PlayerList = Backbone.Collection.extend({});
+  var Invites = Backbone.Collection.extend({
+    model: Invite,
+    url: '/invites',
+  });
 
-  var players = new PlayerList();
+  var invites = new Invites();
+  var InvitesView = Backbone.View.extend({
+    el: $('#invites'),
+    template: _.template($('#_invites').html()),
+    render: function() {
+      var self = this;
+      invites.fetch().done(function() {
+        $(self.el).html(self.template({inviteList: invites.models}));
+      });
+    },
+    events: {
+      'click .accept': 'accept',
+      'click .decline': 'decline'
+    },
+    accept: function(e) {
+      var id = $(e.target).data('invite-id');
+      $.put('/invite/' + id, {
+        pk: id,
+        state: 'A'
+      }).done(function(){
+        console.log('dione');
+      }).fail(function(){
+        console.log('foile');
+      });
+    },
+    decline: function(e) {
+      var id = $(e.target).data('invite-id');
+      $.put('/invite/' + id, {
+        pk: id,
+        state: 'D'
+      }).done(function(){
+        console.log('dione');
+      }).fail(function(){
+        console.log('foile');
+      });
+    }
+  });
 
+  var Games = Backbone.Collection.extend({
+    model: Game,
+    url: '/games'
+  });
 
-
+  var games = new Games();
+  var GamesView = Backbone.View.extend({
+    el: $('#games'),
+    template: _.template($('#_games').html()),
+    render: function() {
+      var self = this;
+      games.fetch().done(function() {
+        $(self.el).html(self.template({games: games.models}));
+      });
+    },
+  });
 
   window.router = new Router();
   Backbone.history.start();
