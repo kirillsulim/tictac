@@ -291,6 +291,7 @@ $(function() {
         console.log(map);
         $(self.el).html(self.template({game: game, map: map}));
       });
+      setTimeout(this.render.bind(this), 1000);
     },
     events: {
       'click .tile': 'move'
