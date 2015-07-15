@@ -8,4 +8,4 @@ var gulp = require('./gulp/')([
 ]);
 
 gulp.task('build', ['bower-files', 'browserify', 'less', 'templates']);
-gulp.task('default', ['build', 'watch', 'browser-sync'])  
+gulp.task('default', ['build', 'watch', 'browser-sync'])

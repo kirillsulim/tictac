@@ -81,6 +81,7 @@ class Game(models.Model):
     ('OP', 'O pending'),
     ('XW', 'X won'),
     ('OW', 'O won'),
+    ('TT', 'Tie'),
   )
 
   x_player = models.ForeignKey(User, related_name='x_player')
@@ -117,7 +118,9 @@ class Game(models.Model):
     if winner:
       self.state = winner
     else:
-      if self.state == 'XP':
+      if move_max_order == 8:
+        self.state = 'TT'
+      elif self.state == 'XP':
         self.state = 'OP'
       elif self.state == 'OP':
         self.state = 'XP'

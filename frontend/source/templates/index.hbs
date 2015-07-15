@@ -4,7 +4,7 @@
       <div class="nav">
         <a href="#invites">invites</a>
         <a href="#games">games</a>
-        <a href="#players">players</a>                
+        <a href="#players">players</a>
       </div>
       <div id='game' class='part'></div>
       <div id='games' class='part'></div>
@@ -51,7 +51,7 @@
 
     <script type="text/template" id="_players">
       <div class="players">
-        <% _.each(plList, function(p) {
+        <% _.each(players, function(p) {
           %> <p><%= p.get('username') %><button class="invite" data-player-id="<%= p.get('pk') %>">Invite</button></p> <%
         }) %>
       </div>
