@@ -27,7 +27,7 @@ var RegisterView = Backbone.View.extend({
         username: username,
         password: pass1
       }).then(function(){
-        window.router.navigate('start', {trigger: true});
+        app.router.navigate('start', {trigger: true});
       });
     }).fail(function(){
     });

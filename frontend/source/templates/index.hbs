@@ -1,11 +1,8 @@
 {{#extend '_h5bp-layout' title='Main'}}
   {{#content 'main'}}
     <div class="container">
-      <div class="nav">
-        <a href="#invites">invites</a>
-        <a href="#games">games</a>
-        <a href="#players">players</a>
-      </div>
+      <div id="lang"></div>
+      <div id="nav" class="part nav"></div>
       <div id='game' class='part'></div>
       <div id='games' class='part'></div>
       <div id='players' class='part'></div>
@@ -18,33 +15,33 @@
 
     <script type="text/template" id="_login">
       <div class="login">
-        <a href="#register">register</a>
+        <a href="#register"><%= app.text('REGISTER') %></a>
         <p>
-          Username: <input type="text" id="username" />
+          <%= app.text('USERNAME') %>: <input type="text" id="username" />
         </p>
         <p>
-          Password: <input type="password" id="password" />
+          <%= app.text('PASSWORD') %>: <input type="password" id="password" />
         </p>
         <p>
-          <button id="do-login">Log in</button>
+          <button id="do-login"><%= app.text('LOG_IN') %></button>
         </p>
       </div>
     </script>
 
     <script type="text/template" id="_register">
       <div class="register">
-        <a href="#login">login</a>
+        <a href="#login"><%= app.text('LOGIN') %></a>
         <p>
-          Username: <input type="text" id="username" />
+          <%= app.text('USERNAME') %>: <input type="text" id="username" />
         </p>
         <p>
-          Password: <input type="password" id="password1" />
+          <%= app.text('PASSWORD') %>: <input type="password" id="password1" />
         </p>
         <p>
-          Retype password: <input type="password" id="password2" />
+          <%= app.text('PASSWORD2') %>: <input type="password" id="password2" />
         </p>
         <p>
-          <button id="do-register">Register</button>
+          <button id="do-register"><%= app.text('REGISTER') %></button>
         </p>
       </div>
     </script>
@@ -52,10 +49,9 @@
     <script type="text/template" id="_players">
       <div class="players">
         <% _.each(players, function(p) {
-          %> <p><%= p.get('username') %><button class="invite" data-player-id="<%= p.get('pk') %>">Invite</button></p> <%
+          %> <p><%= p.get('username') %><button class="invite" data-player-id="<%= p.get('pk') %>"><%= app.text('INVITE') %></button></p> <%
         }) %>
       </div>
-
     </script>
 
     <script type="text/template" id="_invites">
@@ -63,8 +59,8 @@
         <% _.each(inviteList, function(inv) {
           %> <p>
             <%= inv.get('state') %>
-            <button class="accept" data-invite-id="<%= inv.get('pk') %>">Accept</button>
-            <button class="decline" data-invite-id="<%= inv.get('pk') %>">Decline</button>
+            <button class="accept" data-invite-id="<%= inv.get('pk') %>"><%= app.text('ACCEPT') %></button>
+            <button class="decline" data-invite-id="<%= inv.get('pk') %>"><%= app.text('DECLINE') %></button>
           </p> <%
         }) %>
       </div>
@@ -74,8 +70,8 @@
       <div class="games">
         <% _.each(games, function(g) {
           %> <p>
-            <%= g.getMessageForPlayer(player_pk) %>
-            <button class="to-game" data-game-id="<%= g.get('pk') %>">To game</button>
+            <%= app.text(g.getMessageForPlayer(player_pk)) %>
+            <button class="to-game" data-game-id="<%= g.get('pk') %>"><%= app.text('TO_GAME') %></button>
           </p> <%
         }) %>
       </div>
@@ -84,7 +80,7 @@
     <script type="text/template" id="_game">
       <div class="game">
         <p>
-          <%= message %>
+          <%= app.text(message) %>
         </p>
         <div>
           <button data-code="A1" class="tile"><%= map['A1'] %></button>
@@ -97,6 +93,22 @@
           <button data-code="C2" class="tile"><%= map['C2'] %></button>
           <button data-code="C3" class="tile"><%= map['C3'] %></button>
         </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="_nav">
+      <div class="nav part">
+        <a href="#invites"><%= app.text('INVITES') %></a>
+        <a href="#games"><%= app.text('GAMES') %></a>
+        <a href="#players"><%= app.text('PLAYERS') %></a>
+        <a href="#logout"><%= app.text('LOGOUT') %></a>
+      </div>
+    </script>
+
+    <script type="text/template" id="_lang">
+      <div class="lang">
+        <button class="lang-btn" data-lang-id="ru">Русский</button>
+        <button class="lang-btn" data-lang-id="en">English</button>
       </div>
     </script>
   {{/content}}

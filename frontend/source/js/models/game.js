@@ -19,22 +19,22 @@ var Game = Backbone.Model.extend({
 
     var message;
     if((state == 'XW' && me == 'X') || (state == 'OW' && me == 'O')) {
-      message = 'You win!';
+      message = 'YOU_WIN';
     }
     else if((state == 'XW' && me == 'O') || (state == 'OW' && me == 'X')) {
-      message = 'You lose :-(';
+      message = 'YOU_LOSE';
     }
     else if(state == 'TT') {
-      message = 'Tie.';
+      message = 'TIE';
     }
     else if((state == 'XP' && me == 'O') || (state == 'OP' && me == 'X')) {
-      message = 'Opponent turn.';
+      message = 'OP_TURN';
     }
     else if((state == 'XP' && me == 'X') || (state == 'OP' && me == 'O')) {
-      message = 'Your turn.';
+      message = 'YOUR_TURN';
     }
     else {
-      message = "??????";
+      message = '?';
     }
     return message;
   },

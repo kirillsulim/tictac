@@ -4,11 +4,17 @@ var LoginView = require('./views/login');
 var RegisterView = require('./views/register');
 var InvitesView = require('./views/invites');
 var GamesView = require('./views/games');
+var NavView = require('./views/nav');
+var LangView = require('./views/lang');
 
 
 var Router = Backbone.Router.extend({
   initialize: function(opt) {
     this.app = opt.app;
+    this.views.nav = new NavView({app: this.app});
+    this.views.nav.render();
+    this.views.lang = new LangView({app: this.app});
+    this.views.lang.render();
   },
   views: {},
   routes: {
