@@ -10,6 +10,9 @@ from rest_framework.parsers import JSONParser
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.db import transaction
+
+
 
 from .models import *
 from .serializers import *
@@ -31,8 +34,7 @@ class InviteList(APIView):
     return Response(data=InviteSerializer(invites, many=True).data)
 
   def post(self, request):
-    data = JSONParser().parse(request)
-    sz = InviteSerializer(data=data)
+    sz = InviteSerializer(data=request.data)
     if sz.is_valid():
       sz.save()
       return Response(data=sz.data, status=status.HTTP_201_CREATED)
@@ -113,9 +115,9 @@ def make_exception_json(exception):
 class MakeMove(APIView):
   permission_classes = []
 
+  @transaction.non_atomic_requests
   def post(self, request):
-    data = JSONParser().parse(request)
-    sz = MoveSerializer(data=data, partial=True)
+    sz = MoveSerializer(data=request.data, partial=True)
     if sz.is_valid():
       game_pk = sz.validated_data['for_game'].pk
       game = get_object_or_404(Game, pk=game_pk)

@@ -48,6 +48,7 @@ class GameSerializer(serializers.ModelSerializer):
       'o_player',
       'state',
       'moves',
+      'pk',
     ]
 
 

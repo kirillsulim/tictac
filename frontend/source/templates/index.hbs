@@ -1,0 +1,128 @@
+{{#extend '_h5bp-layout' title='Main'}}
+  {{#content 'main'}}
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div id="nav" class="part nav navbar-left"></div>
+        <div id="lang" class="navbar-right"></div>
+      </div>
+    </nav>
+    <div class="navbar-spacer"></div>
+    <div class="container">
+      <div id='game' class='part'></div>
+      <div id='games' class='part'></div>
+      <div id='players' class='part'></div>
+      <div id='invites' class='part'></div>
+      <div id='start' class="part">
+        <div id="login" class="part"></div>
+        <div id="register" class="part"></div>
+      </div>
+    </div>
+
+    <script type="text/template" id="_login">
+      <div class="login">
+        <a href="#register"><%= app.text('REGISTER') %></a>
+        <p>
+          <%= app.text('USERNAME') %>: <input type="text" id="username" />
+        </p>
+        <p>
+          <%= app.text('PASSWORD') %>: <input type="password" id="password" />
+        </p>
+        <p>
+          <button id="do-login"><%= app.text('LOG_IN') %></button>
+        </p>
+      </div>
+    </script>
+
+    <script type="text/template" id="_register">
+      <div class="register">
+        <a href="#login"><%= app.text('LOGIN') %></a>
+        <p>
+          <%= app.text('USERNAME') %>: <input type="text" id="username" />
+        </p>
+        <p>
+          <%= app.text('PASSWORD') %>: <input type="password" id="password1" />
+        </p>
+        <p>
+          <%= app.text('PASSWORD2') %>: <input type="password" id="password2" />
+        </p>
+        <p>
+          <button id="do-register"><%= app.text('REGISTER') %></button>
+        </p>
+      </div>
+    </script>
+
+    <script type="text/template" id="_players">
+      <div class="players">
+        <table>
+          <% _.each(players, function(p) {
+            %> <tr>
+              <td><%= p.get('username') %></td>
+              <td><button class="invite btn btn-default" data-player-id="<%= p.get('pk') %>"><%= app.text('INVITE') %></button></td>
+            </tr> <%
+          }) %>
+        </table>
+      </div>
+    </script>
+
+    <script type="text/template" id="_invites">
+      <div class="invites">
+        <table>
+          <% _.each(invites, function(inv) {
+            %> <tr>
+              <td><button class="accept btn btn-default" data-invite-id="<%= inv.get('pk') %>"><%= app.text('ACCEPT') %></button></td>
+              <td><button class="decline btn btn-default" data-invite-id="<%= inv.get('pk') %>"><%= app.text('DECLINE') %></button></td>
+            </tr> <%
+          }) %>
+        </table>
+      </div>
+    </script>
+
+    <script type="text/template" id="_games">
+      <div class="games">
+        <table>
+          <% _.each(games, function(g) {
+            %> <tr>
+              <td><%= app.text(g.getMessageForPlayer(player_pk)) %></td>
+              <td><button class="to-game btn btn-default" data-game-id="<%= g.get('pk') %>"><%= app.text('TO_GAME') %></button></td>
+            </tr> <%
+          }) %>
+        </table>
+      </div>
+    </script>
+
+    <script type="text/template" id="_game">
+      <div class="game">
+        <p>
+          <%= app.text(message) %>
+        </p>
+        <div>
+          <button data-code="A1" class="tile btn btn-default"><i class="fa <%= map['A1'] %> fa-5"></i></button>
+          <button data-code="A2" class="tile btn btn-default"><i class="fa <%= map['A2'] %> fa-5"></i></button>
+          <button data-code="A3" class="tile btn btn-default"><i class="fa <%= map['A3'] %> fa-5"></i></button><br>
+          <button data-code="B1" class="tile btn btn-default"><i class="fa <%= map['B1'] %> fa-5"></i></button>
+          <button data-code="B2" class="tile btn btn-default"><i class="fa <%= map['B2'] %> fa-5"></i></button>
+          <button data-code="B3" class="tile btn btn-default"><i class="fa <%= map['B3'] %> fa-5"></i></button><br>
+          <button data-code="C1" class="tile btn btn-default"><i class="fa <%= map['C1'] %> fa-5"></i></button>
+          <button data-code="C2" class="tile btn btn-default"><i class="fa <%= map['C2'] %> fa-5"></i></button>
+          <button data-code="C3" class="tile btn btn-default"><i class="fa <%= map['C3'] %> fa-5"></i></button>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="_nav">
+      <ul class="nav part navbar-nav">
+        <li><a href="#invites"><%= app.text('INVITES') %></a></li>
+        <li><a href="#games"><%= app.text('GAMES') %></a></li>
+        <li><a href="#players"><%= app.text('PLAYERS') %></a></li>
+        <li><a href="#logout"><%= app.text('LOGOUT') %></a></li>
+      </ul>
+    </script>
+
+    <script type="text/template" id="_lang">
+      <div class="lang">
+        <button class="lang-btn navbar-btn btn btn-default" data-lang-id="ru">Русский</button>
+        <button class="lang-btn navbar-btn btn btn-default" data-lang-id="en">English</button>
+      </div>
+    </script>
+  {{/content}}
+{{/extend}}
