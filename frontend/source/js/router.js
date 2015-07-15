@@ -42,8 +42,8 @@ var Router = Backbone.Router.extend({
   register: function() {
     if(!this.views.register) {
       this.views.register = new RegisterView({app: this.app});
-      this.views.register.render();
     }
+    this.views.register.render();
     $('.part').hide();
     $('.nav').hide();
     $('#start').show();
@@ -52,8 +52,8 @@ var Router = Backbone.Router.extend({
   login: function() {
     if(!this.views.login) {
       this.views.login = new LoginView({app: this.app});
-      this.views.login.render();
     }
+    this.views.login.render();
     $('.part').hide();
     $('.nav').hide();
     $('#start').show();
@@ -61,30 +61,24 @@ var Router = Backbone.Router.extend({
   },
   players: function() {
     if(!this.app.user) {
-      console.log('not user');
       this.navigate('start', {trigger: true});
     }
     if(!this.views.players) {
-      console.log('not palyers');
       this.views.players = new PlayersView({app: this.app});
-      this.views.players.render();
-      console.log('rendere');
     }
+    this.views.players.render();
     $('.part').hide();
     $('.nav').show();
     $('#players').show();
   },
   invites: function() {
-    console.log('inv hit');
     if(!this.app.user) {
-      console.log('not user');
       this.navigate('start', {trigger: true});
     }
     if(!this.views.invites) {
-      console.log('not invites');
       this.views.invites = new InvitesView({app: this.app});
-      this.views.invites.render();
     }
+    this.views.invites.render();
     $('.part').hide();
     $('.nav').show();
     $('#invites').show();
@@ -95,8 +89,8 @@ var Router = Backbone.Router.extend({
     }
     if(!this.views.games) {
       this.views.games = new GamesView({app: this.app});
-      this.views.games.render();
     }
+    this.views.games.render();
     $('.part').hide();
     $('.nav').show();
     $('#games').show();
@@ -109,7 +103,6 @@ var Router = Backbone.Router.extend({
       this.views.game = new GameView({app: this.app});
     }
     this.views.game.render(id);
-
     $('.part').hide();
     $('.nav').show();
     $('#game').show();
@@ -117,6 +110,7 @@ var Router = Backbone.Router.extend({
   logout: function() {
     var self = this;
     $.post('/rest-auth/logout/').done(function(){
+      self.app.user = undefined;
       self.navigate('start', {trigger: true});
     });
   }

@@ -38,6 +38,23 @@ var Game = Backbone.Model.extend({
     }
     return message;
   },
+  getOpponentPk: function(player_pk){
+    var x_player = this.get('x_player');
+    var o_player = this.get('o_player');
+
+    var me;
+    if(player_pk == x_player) {
+      me = 'X';
+    }
+    else if(player_pk === o_player) {
+      me = 'O';
+    }
+    else {
+      me = '';
+    }
+    var op_pk = me == 'X'? o_player : x_player;
+    return op_pk;
+  }
 });
 
 module.exports = Game;

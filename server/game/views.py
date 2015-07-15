@@ -10,6 +10,9 @@ from rest_framework.parsers import JSONParser
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.db import transaction
+
+
 
 from .models import *
 from .serializers import *
@@ -112,6 +115,7 @@ def make_exception_json(exception):
 class MakeMove(APIView):
   permission_classes = []
 
+  @transaction.non_atomic_requests
   def post(self, request):
     sz = MoveSerializer(data=request.data, partial=True)
     if sz.is_valid():

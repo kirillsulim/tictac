@@ -7,22 +7,24 @@ var GameView = Backbone.View.extend({
     return _.template($('#_game').html())(data);
   },
   game_id: undefined,
+  game_moves: 0,
   render: function(id) {
     var self = this;
     if(id) {
       game_id = parseInt(id);
       this.app.games.fetch().done(function() {
         var game = self.app.games.findWhere({pk: game_id});
+        self.game_moves = game.get('moves').length;
         var map = {};
         var x_player = game.get('x_player');
         var o_player = game.get('o_player');
         _.each(game.get('moves'), function(m){
           var s;
           if(m.player == x_player) {
-            s = 'X';
+            s = 'fa-times';
           }
           else if(m.player == o_player) {
-            s = 'O';
+            s = 'fa-circle-o';
           }
           map[m.code] = s;
         });
@@ -37,26 +39,30 @@ var GameView = Backbone.View.extend({
     } else {
       var game = this.app.games.findWhere({pk: game_id});
       game.fetch().done(function(){
-        var map = {};
-        var x_player = game.get('x_player');
-        var o_player = game.get('o_player');
-        _.each(game.get('moves'), function(m){
-          var s;
-          if(m.player == x_player) {
-            s = 'X';
-          }
-          else if(m.player == o_player) {
-            s = 'O';
-          }
-          map[m.code] = s;
-        });
-        var message = game.getMessageForPlayer(self.app.user.pk);
+        if (game.get('moves').length != self.game_moves) {
+          console.log('rerender ' + self.game_moves + game.get('moves').length);
+          self.game_moves = game.get('moves').length;
+          var map = {};
+          var x_player = game.get('x_player');
+          var o_player = game.get('o_player');
+          _.each(game.get('moves'), function(m){
+            var s;
+            if(m.player == x_player) {
+              s = 'fa-times';
+            }
+            else if(m.player == o_player) {
+              s = 'fa-circle-o';
+            }
+            map[m.code] = s;
+          });
+          var message = game.getMessageForPlayer(self.app.user.pk);
 
-        $(self.el).html(self.template({
-          game: game,
-          map: map,
-          message: message,
-        }));
+          $(self.el).html(self.template({
+            game: game,
+            map: map,
+            message: message,
+          }));
+        }
       });
       setTimeout(this.render.bind(this), 1000);
     }

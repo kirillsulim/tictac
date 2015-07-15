@@ -9,7 +9,7 @@ var InvitesView = Backbone.View.extend({
   render: function() {
     var self = this;
     this.app.invites.fetch().done(function() {
-      $(self.el).html(self.template({inviteList: self.app.invites.models}));
+      $(self.el).html(self.template({invites: self.app.invites.models}));
     });
   },
   events: {

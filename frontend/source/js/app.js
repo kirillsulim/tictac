@@ -85,30 +85,36 @@ $(function() {
   app.games = new Games({app: app});
 
   setInterval(function(){
-    app.players.fetch().done(function(){
-      var v = app.router.views.players;
-      if(v) {
-        v.render();
-      }
-    });
+    if(app.user) {
+      app.players.fetch().done(function(){
+        var v = app.router.views.players;
+        if(v) {
+          v.render();
+        }
+      });
+    }
   }, 1000 * 20);
 
   setInterval(function(){
-    app.invites.fetch().done(function(){
-      var v = app.router.views.players;
-      if(v) {
-        v.render();
-      }
-    });
+    if(app.user) {
+      app.invites.fetch().done(function(){
+        var v = app.router.views.players;
+        if(v) {
+          v.render();
+        }
+      });
+    }
   }, 1000 * 10);
 
   setInterval(function(){
-    app.games.fetch().done(function(){
-      var v = app.router.views.games;
-      if(v) {
-        v.render();
-      }
-    });
+    if(app.user) {
+      app.games.fetch().done(function(){
+        var v = app.router.views.games;
+        if(v) {
+          v.render();
+        }
+      });
+    }
   }, 1000 * 2);
 
   app.router = new Router({app: app});
