@@ -74,7 +74,7 @@
       <div class="games">
         <% _.each(games, function(g) {
           %> <p>
-            <%= g.get('state') %>
+            <%= g.getMessageForPlayer(player_pk) %>
             <button class="to-game" data-game-id="<%= g.get('pk') %>">To game</button>
           </p> <%
         }) %>
@@ -84,7 +84,7 @@
     <script type="text/template" id="_game">
       <div class="game">
         <p>
-          This game state is: <%= game.get('state') %>
+          <%= message %>
         </p>
         <div>
           <button data-code="A1" class="tile"><%= map['A1'] %></button>

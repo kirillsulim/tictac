@@ -9,7 +9,10 @@ var GamesView = Backbone.View.extend({
   render: function() {
     var self = this;
     this.app.games.fetch().done(function() {
-      $(self.el).html(self.template({games: self.app.games.models}));
+      $(self.el).html(self.template({
+        games: self.app.games.models,
+        player_pk: self.app.user.pk,
+      }));
     });
   },
   events: {
