@@ -25,8 +25,8 @@ var GameView = Backbone.View.extend({
             s = 'O';
           }
           map[m.code] = s;
-          var message = game.getMessageForPlayer(self.app.user.pk);
         });
+        var message = game.getMessageForPlayer(self.app.user.pk);
         $(self.el).html(self.template({
           game: game,
           map: map,

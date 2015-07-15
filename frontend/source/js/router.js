@@ -115,8 +115,10 @@ var Router = Backbone.Router.extend({
     $('#game').show();
   },
   logout: function() {
-    $.post('/rest-auth/logout/');
-    this.navigate('start', {trigger: true});
+    var self = this;
+    $.post('/rest-auth/logout/').done(function(){
+      self.navigate('start', {trigger: true});
+    });
   }
 });
 
